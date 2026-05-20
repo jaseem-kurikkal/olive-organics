@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --exec tsx src/main.ts",
+    "build": "npx prisma generate && npx prisma db push --accept-data-loss",
     "start:prod": "tsx src/main.ts"
   },
   "keywords": [],
