@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: olive_organics_prod_db
+    environment:
+      POSTGRES_USER: olive_admin
+      POSTGRES_PASSWORD: supersecretpassword
+      POSTGRES_DB: olive_organics
+    volumes:
+      - pgdata_prod:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+
+  backend:
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    container_name: olive_organics_prod_backend
+    environment:
+      - DATABASE_URL=postgresql://olive_admin:supersecretpassword@postgres:5432/olive_organics?schema=public
+      - JWT_SECRET=production_super_secret_key_change_me
+      - PORT=5000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+    restart: always
+
+  frontend:
+    build:
+      context: ./apps/frontend
+      dockerfile: Dockerfile
+    container_name: olive_organics_prod_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always
+
+volumes:
+  pgdata_prod:

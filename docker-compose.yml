@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: olive_organics_db
+    environment:
+      POSTGRES_USER: olive_admin
+      POSTGRES_PASSWORD: supersecretpassword
+      POSTGRES_DB: olive_organics
+    ports:
+      - "5435:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api-gateway:
+    build:
+      context: ./apps/api-gateway
+    container_name: olive_organics_api_gateway
+    environment:
+      - PORT=5001
+      - ORDER_SERVICE_URL=http://order-service:5002
+      - PRODUCT_SERVICE_URL=http://product-service:5003
+    ports:
+      - "5001:5001"
+    depends_on:
+      - order-service
+      - product-service
+
+  order-service:
+    build:
+      context: ./apps/order-service
+    container_name: olive_organics_order_service
+    environment:
+      - DATABASE_URL=postgresql://olive_admin:supersecretpassword@postgres:5432/olive_organics?schema=public
+      - JWT_SECRET=dev_jwt_secret_key
+      - PORT=5002
+    ports:
+      - "5002:5002"
+    depends_on:
+      - postgres
+    volumes:
+      - ./apps/order-service:/usr/src/app
+      - /usr/src/app/node_modules
+
+  product-service:
+    build:
+      context: ./apps/product-service
+    container_name: olive_organics_product_service
+    environment:
+      - PORT=5003
+    ports:
+      - "5003:5003"
+
+volumes:
+  pgdata:

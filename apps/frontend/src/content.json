@@ -1,0 +1,194 @@
+{
+  "navigation": {
+    "brandName": "Olive Organics",
+    "links": [
+      { "label": "Home", "url": "/" },
+      { "label": "Atelier", "url": "/build" },
+      { "label": "About", "url": "/ritual" },
+      { "label": "Sign In", "url": "/auth" }
+    ]
+  },
+  "customization": {
+    "previewSubtitle": "Your Creation",
+    "previewDescription": "A bespoke formulation tailored to your skin.",
+    "totalText": "Total",
+    "step1Title": "01 — Select Size",
+    "step2Title": "02 — Active Ingredients",
+    "step3Title": "03 — Essential Oils",
+    "addToCartText": "Add to Cart",
+    "buyNowText": "Buy Now",
+    "processingText": "Processing...",
+    "addedToCartMessage": "Added to your cart",
+    "successTitle": "Order Confirmed",
+    "successSubtitle": "Scan to complete payment",
+    "returnButtonText": "Return to Atelier"
+  },
+  "cart": {
+    "pageTitle": "Your Cart",
+    "pageSubtitle": "Review your curated selections",
+    "emptyTitle": "Your cart is empty",
+    "emptySubtitle": "Explore our collections and craft your perfect formulation.",
+    "browseButtonText": "Browse Collections",
+    "buildButtonText": "Build Your Own",
+    "itemSizeLabel": "Size",
+    "itemFragranceLabel": "Fragrance",
+    "itemIngredientsLabel": "Ingredients",
+    "removeText": "Remove",
+    "subtotalText": "Subtotal",
+    "shippingText": "Shipping",
+    "shippingValue": "Complimentary",
+    "totalText": "Total",
+    "checkoutButtonText": "Proceed to Checkout",
+    "continueShoppingText": "Continue Shopping"
+  },
+  "ingredients": [
+    { "id": "shea", "name": "Shea Butter", "price": 3, "desc": "Extra moisture for dry skin.", "color": "#d4a373" },
+    { "id": "charcoal", "name": "Activated Charcoal", "price": 2, "desc": "Deep pore cleansing.", "color": "#424242" },
+    { "id": "oatmeal", "name": "Colloidal Oatmeal", "price": 2, "desc": "Soothes irritation and eczema.", "color": "#c8a96e" },
+    { "id": "honey", "name": "Manuka Honey", "price": 4, "desc": "Antibacterial and healing.", "color": "#f9a825" },
+    { "id": "rosewater", "name": "Rose Water", "price": 3, "desc": "Balances pH and brightens.", "color": "#e91e8c" },
+    { "id": "neem", "name": "Neem Extract", "price": 2, "desc": "Antibacterial Ayurvedic herb.", "color": "#388e3c" }
+  ],
+  "fragrances": [
+    { "id": "lavender", "name": "French Lavender", "color": "#9b72cf" },
+    { "id": "sandalwood", "name": "Red Sandalwood", "color": "#8b5a2b" },
+    { "id": "citrus", "name": "Citrus Burst", "color": "#fbc02d" },
+    { "id": "rose", "name": "Damascus Rose", "color": "#e91e8c" },
+    { "id": "mint", "name": "Arctic Mint", "color": "#558b2f" },
+    { "id": "unscented", "name": "Unscented", "color": "#757575" }
+  ],
+  "ritual": {
+    "heroTag": "Our Story",
+    "heroTitle": "The Ritual",
+    "heroDescription": "Born from a small kitchen in 2021, Olive Organics began as a passion project — crafting homemade, organic personal care products with love and intention. Today, we bring that same handmade authenticity to every bar, bottle, and blend.",
+    "originTitle": "Where It All Began",
+    "originText": "What started as a simple desire for clean, chemical-free skincare grew into a mission. We source ethically, formulate by hand, and believe that what touches your skin should be as pure as what nourishes your body. Every product is crafted in small batches to ensure the highest quality and freshness.",
+    "philosophyTitle": "Our Philosophy",
+    "philosophyText": "We believe in the power of nature. No synthetic fragrances, no parabens, no compromises. Just pure botanical ingredients combined with traditional Ayurvedic wisdom and modern dermatological science.",
+    "productsTitle": "What We Offer",
+    "products": [
+      {
+        "name": "Handcrafted Soaps",
+        "description": "Cold-pressed, naturally scented soap bars made with organic oils and botanical extracts. Each bar is cured for 6 weeks for the perfect lather.",
+        "icon": "soap",
+        "color": "#749c56"
+      },
+      {
+        "name": "Herbal Shampoo",
+        "description": "Sulfate-free, plant-based shampoo formulated with neem, amla, and hibiscus extracts for naturally strong and shiny hair.",
+        "icon": "shampoo",
+        "color": "#9b72cf"
+      },
+      {
+        "name": "Hair Oil Blends",
+        "description": "Cold-pressed coconut, castor, and olive oil infused with brahmi, bhringraj, and rosemary for deep nourishment and growth.",
+        "icon": "oil",
+        "color": "#d4874a"
+      },
+      {
+        "name": "Custom Formulations",
+        "description": "Build your own products. Choose your base, select ingredients, pick a fragrance — we craft it fresh just for you.",
+        "icon": "custom",
+        "color": "#e05a3a"
+      }
+    ],
+    "timelineTitle": "Our Journey",
+    "timeline": [
+      { "year": "2021", "title": "The Kitchen Lab", "description": "Started making soaps at home for family and friends using traditional cold-process methods." },
+      { "year": "2022", "title": "First Market", "description": "Launched at local organic markets. Sold out in the first weekend. Word spread fast." },
+      { "year": "2023", "title": "Product Expansion", "description": "Introduced herbal shampoo and hair oil blends. Moved to a dedicated small-batch production studio." },
+      { "year": "2024", "title": "Going Digital", "description": "Launched the online store with custom formulation capabilities. Customers can now build their own products." },
+      { "year": "2025", "title": "Community of 5000+", "description": "Grew to a loyal community of customers across the country. Every product still handmade with care." }
+    ],
+    "valuesTitle": "What We Stand For",
+    "values": [
+      { "title": "100% Organic", "description": "Every ingredient is certified organic and ethically sourced.", "icon": "leaf" },
+      { "title": "Handmade", "description": "Small-batch production ensures quality and freshness in every product.", "icon": "hand" },
+      { "title": "Cruelty Free", "description": "Never tested on animals. We believe in compassion at every step.", "icon": "heart" },
+      { "title": "Customizable", "description": "Your skin is unique. Build products tailored to your exact needs.", "icon": "sparkle" }
+    ],
+    "ctaTitle": "Craft Your Own",
+    "ctaDescription": "Ready to experience the difference? Build a custom formulation tailored to your skin, or explore our curated collections.",
+    "ctaBuildButton": "Build Your Product",
+    "ctaBrowseButton": "Browse Collections"
+  },
+  "homepage": {
+    "whyUsTag": "Why Choose Us",
+    "whyUsTitle": "Pure by Nature, Crafted by Hand",
+    "whyUsItems": [
+      { "title": "100% Organic", "description": "Every ingredient is certified organic — sourced from sustainable farms with zero chemicals.", "icon": "leaf", "stat": "0%", "statLabel": "Chemicals" },
+      { "title": "Handmade Fresh", "description": "Small-batch, cold-process production. Every product is crafted by hand, never mass-produced.", "icon": "hand", "stat": "6wk", "statLabel": "Curing Time" },
+      { "title": "Cruelty Free", "description": "Never tested on animals. Certified cruelty-free and vegan-friendly across our entire range.", "icon": "heart", "stat": "100%", "statLabel": "Vegan" },
+      { "title": "Custom Blends", "description": "Build products tailored to your exact skin type, fragrance preference, and ingredient needs.", "icon": "sparkle", "stat": "50+", "statLabel": "Combinations" }
+    ],
+    "testimonialsTag": "What People Say",
+    "testimonialsTitle": "Trusted by Thousands",
+    "testimonials": [
+      { "name": "Ayesha R.", "location": "Mumbai", "text": "I switched from commercial soap to Olive Organics 6 months ago. My skin has never been this soft. The lavender bar is my absolute favourite.", "rating": 5 },
+      { "name": "Priya K.", "location": "Bangalore", "text": "The custom formulation is brilliant. I built a soap with neem and charcoal for my oily skin and it works better than any branded face wash I've tried.", "rating": 5 },
+      { "name": "Rahul M.", "location": "Delhi", "text": "Bought the hair oil for my wife as a gift. She loved it so much she ordered 3 more. The quality is exceptional and you can tell it's made with real ingredients.", "rating": 5 },
+      { "name": "Fatima S.", "location": "Kochi", "text": "Finally a brand that doesn't use parabens or synthetic fragrance. My eczema has improved dramatically since I started using their oatmeal soap.", "rating": 5 },
+      { "name": "Deepa V.", "location": "Chennai", "text": "The herbal shampoo is a game changer. My hair fall reduced noticeably within the first month. No silicones, no sulfates, just pure herbs.", "rating": 5 },
+      { "name": "Amira J.", "location": "Hyderabad", "text": "I love that I can customize everything. The sandalwood fragrance soap is luxurious — feels like a spa experience every morning.", "rating": 5 }
+    ],
+    "ctaTag": "Start Your Ritual",
+    "ctaTitle": "Your Skin Deserves Better",
+    "ctaDescription": "Join thousands who made the switch to clean, organic personal care. Build your custom formulation or explore our curated collections.",
+    "ctaBuildButton": "Build Your Product",
+    "ctaBrowseButton": "Explore Collections"
+  },
+  "newsletter": {
+    "title": "Stay in the Loop",
+    "description": "Get early access to new products, exclusive offers, and skincare tips delivered to your inbox.",
+    "placeholder": "Enter your email",
+    "buttonText": "Subscribe",
+    "successMessage": "Welcome to the family!"
+  },
+  "footer": {
+    "brandDescription": "Handcrafted organic personal care products made with love since 2021. Pure ingredients, zero compromises.",
+    "sections": [
+      {
+        "title": "Shop",
+        "links": [
+          { "label": "All Products", "url": "/" },
+          { "label": "Custom Build", "url": "/build" },
+          { "label": "Soaps", "url": "/" },
+          { "label": "Hair Care", "url": "/" }
+        ]
+      },
+      {
+        "title": "Company",
+        "links": [
+          { "label": "Our Story", "url": "/ritual" },
+          { "label": "Ingredients", "url": "/ritual" },
+          { "label": "Sustainability", "url": "/ritual" },
+          { "label": "Contact", "url": "/ritual" }
+        ]
+      },
+      {
+        "title": "Support",
+        "links": [
+          { "label": "FAQ", "url": "/" },
+          { "label": "Shipping", "url": "/" },
+          { "label": "Returns", "url": "/" },
+          { "label": "Track Order", "url": "/" }
+        ]
+      }
+    ],
+    "socialLinks": [
+      { "platform": "Instagram", "url": "#" },
+      { "platform": "Twitter", "url": "#" },
+      { "platform": "Facebook", "url": "#" }
+    ],
+    "contact": {
+      "address": "Karuvambram (PO) 676123, Manjeri, Malappuram, Kerala, India",
+      "phone": "+91 9567188633",
+      "email": "jaseela@oliveorganics.in"
+    },
+    "copyright": "© 2025 Olive Organics. All rights reserved.",
+    "bottomLinks": [
+      { "label": "Privacy Policy", "url": "#" },
+      { "label": "Terms of Service", "url": "#" }
+    ]
+  }
+}

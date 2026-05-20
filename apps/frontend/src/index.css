@@ -1,0 +1,212 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-olive-50: #fbfdf9;
+  --color-olive-100: #f4f9f0;
+  --color-olive-200: #e7f2dd;
+  --color-olive-300: #d1e5c0;
+  --color-olive-400: #b4d39c;
+  --color-olive-500: #93ba75;
+  --color-olive-600: #749c56;
+  --color-olive-700: #597b41;
+  --color-olive-800: #496337;
+  --color-olive-900: #3c522f;
+  --color-olive-950: #1f2d16;
+  --font-serif: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #050a05;
+  overflow-x: hidden;
+}
+
+/* ============================================
+   LUXURY SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar { width: 12px; }
+::-webkit-scrollbar-track { background: #0a0f0a; }
+::-webkit-scrollbar-thumb { background: #496337; border-radius: 4px; }
+
+/* ============================================
+   CURSOR
+   ============================================ */
+* { cursor: default; }
+a, button { cursor: pointer; }
+
+/* ============================================
+   GRAIN TEXTURE OVERLAY
+   ============================================ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* ============================================
+   WATER DROPLET ANIMATION
+   ============================================ */
+@keyframes dropFall {
+  0% { transform: translateY(-50px) scale(0.9); opacity: 0; }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.3; }
+  100% { transform: translateY(110vh) scale(1); opacity: 0; }
+}
+
+@keyframes dropWobble {
+  0%, 100% { border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; }
+  25% { border-radius: 55% 45% 45% 55% / 55% 45% 55% 45%; }
+  50% { border-radius: 45% 55% 55% 45% / 45% 55% 45% 55%; }
+  75% { border-radius: 50% 50% 45% 55% / 60% 55% 45% 40%; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes float3D {
+  0%, 100% { transform: translateY(0px) rotateX(0deg) rotateZ(0deg); }
+  33% { transform: translateY(-20px) rotateX(5deg) rotateZ(-2deg); }
+  66% { transform: translateY(-10px) rotateX(-5deg) rotateZ(2deg); }
+}
+
+@keyframes liquidPulse {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.3; }
+  50% { transform: scale(1.1) rotate(180deg); opacity: 0.5; }
+}
+
+@keyframes ambientGlow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.05); }
+}
+
+@keyframes particleDrift {
+  0% { transform: translate(0, 0) scale(1); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 0.5; }
+  100% { transform: translate(var(--tx), var(--ty)) scale(0.5); opacity: 0; }
+}
+
+@keyframes textGlitch {
+  0%, 95%, 100% { clip-path: none; transform: none; }
+  96% { clip-path: polygon(0 30%, 100% 30%, 100% 50%, 0 50%); transform: translateX(-2px); }
+  97% { clip-path: polygon(0 70%, 100% 70%, 100% 90%, 0 90%); transform: translateX(2px); }
+  98% { clip-path: none; transform: none; }
+}
+
+@keyframes revealUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes scanLine {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+/* ============================================
+   GLASS MORPHISM PREMIUM
+   ============================================ */
+.glass-ultra {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* ============================================
+   SHIMMER TEXT
+   ============================================ */
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.6) 0%,
+    rgba(255,255,255,1) 30%,
+    rgba(200,220,180,1) 50%,
+    rgba(255,255,255,1) 70%,
+    rgba(255,255,255,0.6) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+
+/* ============================================
+   3D CARD PRESERVE
+   ============================================ */
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.perspective-2000 {
+  perspective: 2000px;
+}
+
+/* ============================================
+   DROPLET STYLES
+   ============================================ */
+.water-droplet {
+  animation: dropFall var(--duration, 4s) var(--delay, 0s) linear infinite,
+             dropWobble 2s ease-in-out infinite;
+}
+
+/* ============================================
+   MAGNETIC BUTTON
+   ============================================ */
+.btn-magnetic {
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ============================================
+   LUXURY DIVIDER
+   ============================================ */
+.divider-luxury {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.1) 20%,
+    rgba(255,255,255,0.3) 50%,
+    rgba(255,255,255,0.1) 80%,
+    transparent
+  );
+}
+
+/* ============================================
+   FLOATING PARTICLES CANVAS
+   ============================================ */
+.particles-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
