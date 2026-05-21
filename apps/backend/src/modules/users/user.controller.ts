@@ -43,8 +43,25 @@ export const login = async (req: Request, res: Response) => {
 
     const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
 
-    res.json({ success: true, token, user: { id: user.id, email: user.email, firstName: user.firstName } });
+    res.json({ success: true, token, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName } });
   } catch (error) {
     res.status(500).json({ success: false, error: 'Server error during login.' });
+  }
+};
+
+export const getMyOrders = async (req: Request, res: Response) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return res.status(401).json({ error: 'No token' });
+    const token = authHeader.split(' ')[1];
+    const decoded: any = jwt.verify(token, JWT_SECRET);
+    const orders = await prisma.order.findMany({
+      where: { userId: decoded.id },
+      include: { items: true },
+      orderBy: { createdAt: 'desc' },
+    });
+    res.json({ success: true, orders });
+  } catch {
+    res.status(401).json({ error: 'Invalid token' });
   }
 };

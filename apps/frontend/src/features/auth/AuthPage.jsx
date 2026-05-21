@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Lock, Mail, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import API_URL from '../../shared/config/api';
+import { useAuth } from '../../shared/context/AuthContext';
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -10,12 +11,9 @@ const AuthPage = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const handleToggle = () => {
-    setIsLogin(!isLogin);
-    setError(null);
-  };
-
+  const handleToggle = () => { setIsLogin(!isLogin); setError(null); };
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
@@ -24,7 +22,7 @@ const AuthPage = () => {
     setError(null);
 
     const url = isLogin ? `${API_URL}/api/v1/users/login` : `${API_URL}/api/v1/users/register`;
-    
+
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -32,14 +30,19 @@ const AuthPage = () => {
         body: JSON.stringify(formData)
       });
       const data = await response.json();
-      
+
       if (response.ok) {
         if (isLogin) {
-          localStorage.setItem('olive_token', data.token);
-          navigate('/build');
+          login(data.user, data.token);
+          // Go back to where they came from (cart), or home
+          const returnTo = sessionStorage.getItem('olive_returnTo') || '/';
+          sessionStorage.removeItem('olive_returnTo');
+          navigate(returnTo);
         } else {
           setIsLogin(true);
-          alert('Registration successful. Please login.');
+          setError(null);
+          setFormData({ ...formData, password: '' });
+          alert('Registration successful! Please sign in.');
         }
       } else {
         setError(data.error);
@@ -50,6 +53,7 @@ const AuthPage = () => {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="relative min-h-screen flex items-center justify-center pt-24" style={{ background: '#050a05' }}>

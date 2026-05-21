@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Minus, Plus, X, ShoppingBag, ArrowRight, Check } from 'lucide-react';
+import { Minus, Plus, X, ShoppingBag, ArrowRight, Check, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../shared/context/CartContext';
+import { useAuth } from '../../shared/context/AuthContext';
 import WaterDroplets from '../../shared/components/WaterDroplets';
 import siteContent from '../../content.json';
 import { api } from '../../shared/config/api';
@@ -13,6 +14,7 @@ const cartText = siteContent.cart;
 
 const CartPage = () => {
   const { cartItems, removeFromCart, updateQuantity, clearCart, cartTotal, cartCount } = useCart();
+  const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderSuccessData, setOrderSuccessData] = useState(null);
@@ -23,10 +25,20 @@ const CartPage = () => {
 
   const handleCheckout = async () => {
     if (cartItems.length === 0) return;
+
+    // Require login before purchase
+    if (!isLoggedIn) {
+      sessionStorage.setItem('olive_returnTo', '/cart');
+      navigate('/auth');
+      return;
+    }
+
     setIsSubmitting(true);
 
+    const token = localStorage.getItem('olive_token');
     const payload = {
       totalAmount: cartTotal,
+      userId: JSON.parse(localStorage.getItem('olive_user') || 'null')?.id || null,
       items: cartItems.map(item => ({
         productId: 'custom-atelier-build',
         quantity: item.quantity,
@@ -42,7 +54,10 @@ const CartPage = () => {
     try {
       const response = await fetch(api.orders, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify(payload)
       });
       const data = await response.json();

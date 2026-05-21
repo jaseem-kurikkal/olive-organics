@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, LogOut, Package, ChevronDown } from 'lucide-react';
 import HeroCarousel from './features/products/HeroCarousel';
 import CustomizationEngine from './features/customization/CustomizationEngine';
 import CartPage from './features/cart/CartPage';
 import RitualPage from './features/ritual/RitualPage';
 import AuthPage from './features/auth/AuthPage';
 import AdminDashboard from './features/admin/AdminDashboard';
+import MyOrdersPage from './features/orders/MyOrdersPage';
 import ErrorBoundary from './shared/components/ErrorBoundary';
 import { WhyUsSection, TestimonialsSection, HomeCTA, NewsletterSection, SiteFooter } from './features/home/HomeSections';
 import { CartProvider, useCart } from './shared/context/CartContext';
+import { AuthProvider, useAuth } from './shared/context/AuthContext';
 import siteContent from './content.json';
 
 const NavLink = ({ to, children, onClick }) => (
@@ -20,10 +22,97 @@ const NavLink = ({ to, children, onClick }) => (
   </Link>
 );
 
+// ─── User Avatar Dropdown ─────────────────────────────────────────────────────
+function UserMenu({ onClose }) {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const ref = useRef(null);
+  const [open, setOpen] = useState(false);
+
+  // Close on outside click
+  useEffect(() => {
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const initials = `${user?.firstName?.[0] || ''}${user?.lastName?.[0] || ''}`.toUpperCase();
+
+  const handleLogout = () => {
+    logout();
+    setOpen(false);
+    onClose?.();
+    navigate('/');
+  };
+
+  return (
+    <div ref={ref} className="relative">
+      {/* Avatar button */}
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-2 group"
+      >
+        <div
+          className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-medium tracking-wide relative"
+          style={{
+            background: 'linear-gradient(135deg, #496337, #749c56)',
+            boxShadow: '0 0 20px rgba(73,99,55,0.4)',
+          }}
+        >
+          {initials || user?.firstName?.[0]?.toUpperCase()}
+        </div>
+        <ChevronDown className={`w-3 h-3 text-white/40 transition-transform duration-300 ${open ? 'rotate-180' : ''}`} />
+      </motion.button>
+
+      {/* Dropdown */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -8, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.95 }}
+            transition={{ duration: 0.2, ease: [0.19, 1, 0.22, 1] }}
+            className="absolute right-0 top-12 w-52 rounded-2xl overflow-hidden z-50"
+            style={{
+              background: 'rgba(10,15,10,0.97)',
+              backdropFilter: 'blur(40px)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.7)',
+            }}
+          >
+            {/* User info */}
+            <div className="px-4 py-3 border-b border-white/05">
+              <p className="text-white text-sm font-medium">{user?.firstName} {user?.lastName}</p>
+              <p className="text-white/30 text-xs truncate">{user?.email}</p>
+            </div>
+            {/* Menu items */}
+            <div className="p-2">
+              <Link to="/my-orders" onClick={() => setOpen(false)}
+                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/05 transition-all text-sm">
+                <Package className="w-4 h-4" />
+                My Orders
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-400/60 hover:text-red-400 hover:bg-red-400/05 transition-all text-sm">
+                <LogOut className="w-4 h-4" />
+                Sign Out
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 function AppContent() {
   const [themeColor, setThemeColor] = useState('#1a0a2e');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { cartCount } = useCart();
+  const { isLoggedIn } = useAuth();
 
   const closeMobile = () => setMobileMenuOpen(false);
 
@@ -91,6 +180,22 @@ function AppContent() {
               </motion.div>
             </Link>
 
+            {/* Auth: Avatar or Sign In */}
+            {isLoggedIn ? (
+              <UserMenu onClose={closeMobile} />
+            ) : (
+              <Link to="/auth" onClick={closeMobile}>
+                <motion.div
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="text-[11px] font-semibold uppercase tracking-[0.25em] text-white/60 hover:text-white px-5 py-3 rounded-full transition-all duration-300"
+                  style={{ border: '1px solid rgba(255,255,255,0.1)' }}
+                >
+                  Sign In
+                </motion.div>
+              </Link>
+            )}
+
             {/* Mobile Hamburger */}
             <button
               className="md:hidden text-white/50 hover:text-white transition-colors p-2"
@@ -121,6 +226,9 @@ function AppContent() {
                 {siteContent.navigation.links.map((link, idx) => (
                   <NavLink key={idx} to={link.url} onClick={closeMobile}>{link.label}</NavLink>
                 ))}
+                {isLoggedIn && (
+                  <NavLink to="/my-orders" onClick={closeMobile}>My Orders</NavLink>
+                )}
               </nav>
             </motion.div>
           )}
@@ -180,6 +288,7 @@ function AppContent() {
             </>
           } />
           <Route path="/auth" element={<AuthPage />} />
+          <Route path="/my-orders" element={<MyOrdersPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </AnimatePresence>
@@ -191,9 +300,11 @@ function App() {
   return (
     <Router>
       <ErrorBoundary>
-        <CartProvider>
-          <AppContent />
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <AppContent />
+          </CartProvider>
+        </AuthProvider>
       </ErrorBoundary>
     </Router>
   );
