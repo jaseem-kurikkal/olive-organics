@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Plus, Minus, ShoppingBag } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../shared/context/CartContext';
+import { useAuth } from '../../shared/context/AuthContext';
 import WaterDroplets from '../../shared/components/WaterDroplets';
 import siteContent from '../../content.json';
 import { api } from '../../shared/config/api';
@@ -20,6 +21,7 @@ const CustomizationEngine = () => {
   const [orderSuccessData, setOrderSuccessData] = useState(null);
 
   const { addToCart } = useCart();
+  const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
   const activeFragrance = FRAGRANCES.find(f => f.id === fragrance);
@@ -51,10 +53,29 @@ const CustomizationEngine = () => {
     setTimeout(() => setAddedToCart(false), 2000);
   };
 
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) return resolve(true);
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
   const handleBuyNow = async () => {
+    if (!isLoggedIn) {
+      sessionStorage.setItem('olive_returnTo', '/build');
+      navigate('/auth');
+      return;
+    }
+
     setIsSubmitting(true);
+    const token = localStorage.getItem('olive_token');
     const customPayload = {
       totalAmount: totalPrice,
+      userId: JSON.parse(localStorage.getItem('olive_user') || 'null')?.id || null,
       items: [{
         productId: "custom-atelier-build",
         quantity,
@@ -65,13 +86,48 @@ const CustomizationEngine = () => {
     try {
       const response = await fetch(api.orders, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify(customPayload)
       });
       const data = await response.json();
       if (response.ok) {
-        if (data.stripeUrl) {
-          window.location.href = data.stripeUrl;
+        if (data.razorpayOrderId) {
+          const res = await loadRazorpayScript();
+          if (!res) {
+            alert('Razorpay SDK failed to load. Are you online?');
+            setIsSubmitting(false);
+            return;
+          }
+
+          const options = {
+            key: data.razorpayKeyId,
+            amount: Math.round(totalPrice * 100),
+            currency: "USD",
+            name: "Olive Organics",
+            description: "Custom Formulation Checkout",
+            order_id: data.razorpayOrderId,
+            handler: async function (paymentResponse) {
+              try {
+                await fetch(`${api.orders}/verify`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ ...paymentResponse, orderId: data.order.id })
+                });
+                navigate('/my-orders?payment=success');
+              } catch (e) {
+                alert('Payment verification failed');
+              }
+            },
+            theme: { color: activeFragrance?.color || "#749c56" }
+          };
+          const rzp = new window.Razorpay(options);
+          rzp.on('payment.failed', function (paymentResponse) {
+            alert(paymentResponse.error.description);
+          });
+          rzp.open();
         } else {
           setOrderSuccessData(data);
         }
