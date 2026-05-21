@@ -112,16 +112,29 @@ export default function MyOrdersPage() {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  // Detect if redirected back from Stripe payment
+  const paymentSuccess = new URLSearchParams(window.location.search).get('payment') === 'success';
 
   useEffect(() => {
     if (!isLoggedIn) { navigate('/auth'); return; }
     const token = localStorage.getItem('olive_token');
+    setLoading(true);
+    setError(false);
     fetch(`${API_BASE}/users/my-orders`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(r => r.json())
-      .then(d => { setOrders(d.orders || []); setLoading(false); })
-      .catch(() => setLoading(false));
+      .then(d => {
+        if (d.success) {
+          setOrders(d.orders || []);
+        } else {
+          setError(true);
+        }
+        setLoading(false);
+      })
+      .catch(() => { setError(true); setLoading(false); });
   }, [isLoggedIn]);
 
   return (
@@ -135,10 +148,30 @@ export default function MyOrdersPage() {
           <p className="text-white/30 text-sm mt-1">Welcome back, {user?.firstName}</p>
         </motion.div>
 
+        {/* Payment success banner */}
+        {paymentSuccess && (
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+            className="mb-6 px-5 py-4 rounded-2xl flex items-center gap-3"
+            style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.25)' }}>
+            <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#22c55e' }}>
+              <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <div>
+              <p className="text-green-400 text-sm font-medium">Payment Successful!</p>
+              <p className="text-white/30 text-xs">Your order has been confirmed and will appear below shortly.</p>
+            </div>
+          </motion.div>
+        )}
+
         {loading ? (
           <div className="space-y-4">
             {[0,1,2].map(i => <div key={i} className="h-20 rounded-3xl animate-pulse" style={{ background: 'rgba(255,255,255,0.03)' }} />)}
           </div>
+        ) : error ? (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
+            <p className="text-red-400/60 text-sm mb-2">Could not load your orders.</p>
+            <p className="text-white/20 text-xs">Make sure you're connected and try again.</p>
+          </motion.div>
         ) : orders.length === 0 ? (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
             className="text-center py-20">

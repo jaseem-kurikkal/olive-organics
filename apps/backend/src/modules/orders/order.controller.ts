@@ -59,8 +59,8 @@ export const createOrder = async (req: Request, res: Response) => {
           quantity: item.quantity,
         })),
         mode: 'payment',
-        success_url: `http://localhost:5173/success?order_id=${order.id}`,
-        cancel_url: `http://localhost:5173/build`,
+        success_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/my-orders?payment=success`,
+        cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/cart`,
         client_reference_id: order.id,
       });
 
