@@ -123,12 +123,12 @@
     "testimonialsTag": "What People Say",
     "testimonialsTitle": "Trusted by Thousands",
     "testimonials": [
-      { "name": "Ayesha R.", "location": "Mumbai", "text": "I switched from commercial soap to Olive Organics 6 months ago. My skin has never been this soft. The lavender bar is my absolute favourite.", "rating": 5 },
+      { "name": "Ayesha R.", "location": "Mumbai", "text": "I switched from commercial soap to Olive Organics 6 months ago. My skin has never been this soft. The lavender bar is my absolute favourite.", "rating": 4 },
       { "name": "Priya K.", "location": "Bangalore", "text": "The custom formulation is brilliant. I built a soap with neem and charcoal for my oily skin and it works better than any branded face wash I've tried.", "rating": 5 },
-      { "name": "Rahul M.", "location": "Delhi", "text": "Bought the hair oil for my wife as a gift. She loved it so much she ordered 3 more. The quality is exceptional and you can tell it's made with real ingredients.", "rating": 5 },
-      { "name": "Fatima S.", "location": "Kochi", "text": "Finally a brand that doesn't use parabens or synthetic fragrance. My eczema has improved dramatically since I started using their oatmeal soap.", "rating": 5 },
-      { "name": "Deepa V.", "location": "Chennai", "text": "The herbal shampoo is a game changer. My hair fall reduced noticeably within the first month. No silicones, no sulfates, just pure herbs.", "rating": 5 },
-      { "name": "Amira J.", "location": "Hyderabad", "text": "I love that I can customize everything. The sandalwood fragrance soap is luxurious — feels like a spa experience every morning.", "rating": 5 }
+      { "name": "Rahul M.", "location": "Delhi", "text": "Bought the hair oil for my wife as a gift. She loved it so much she ordered 3 more. The quality is exceptional and you can tell it's made with real ingredients.", "rating": 3.9 },
+      { "name": "Fatima S.", "location": "Kochi", "text": "Finally a brand that doesn't use parabens or synthetic fragrance. My eczema has improved dramatically since I started using their oatmeal soap.", "rating": 4.1 },
+      { "name": "Deepa V.", "location": "Chennai", "text": "The herbal shampoo is a game changer. My hair fall reduced noticeably within the first month. No silicones, no sulfates, just pure herbs.", "rating": 4.9 },
+      { "name": "Amira J.", "location": "Hyderabad", "text": "I love that I can customize everything. The sandalwood fragrance soap is luxurious — feels like a spa experience every morning.", "rating": 4.5 }
     ],
     "ctaTag": "Start Your Ritual",
     "ctaTitle": "Your Skin Deserves Better",
