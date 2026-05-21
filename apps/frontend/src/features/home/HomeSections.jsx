@@ -132,10 +132,11 @@ export const TestimonialsSection = () => (
           </div>
 
           {/* Stars */}
-          <div className="flex gap-1 mb-5">
-            {[...Array(t.rating)].map((_, i) => (
+          <div className="flex gap-1 mb-5 items-center">
+            {[...Array(Math.round(t.rating))].map((_, i) => (
               <Star key={i} className="w-3.5 h-3.5 fill-[#749c56] text-[#749c56]" />
             ))}
+            <span className="text-white/40 text-xs ml-1">{t.rating}</span>
           </div>
 
           <p className="text-white/50 text-sm leading-relaxed font-light mb-6 relative z-10">
