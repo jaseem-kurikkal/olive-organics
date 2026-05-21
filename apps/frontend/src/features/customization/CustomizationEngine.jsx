@@ -244,7 +244,7 @@ const CustomizationEngine = () => {
                 className="font-serif font-light"
                 style={{ fontSize: '3rem', fontFamily: "'Cormorant Garamond', serif" }}
               >
-                ${totalPrice}
+                ₹{totalPrice}
               </motion.span>
             </div>
           </div>

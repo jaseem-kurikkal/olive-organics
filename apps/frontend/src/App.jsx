@@ -256,7 +256,7 @@ function AppContent() {
             </>
           } />
           <Route path="/build" element={
-            <div className="min-h-screen" style={{ background: '#050a05' }}>
+            <div className="min-h-screen" style={{ background: '#121a12' }}>
               <div className="pt-32 pb-20 px-4 text-center">
                 <motion.div
                   initial={{ opacity: 0, y: 60 }}
