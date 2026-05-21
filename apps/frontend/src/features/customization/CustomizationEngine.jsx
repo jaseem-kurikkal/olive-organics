@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Plus, Minus, ShoppingBag } from 'lucide-react';
+import { Check, Plus, Minus, ShoppingBag, Loader } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../shared/context/CartContext';
 import { useAuth } from '../../shared/context/AuthContext';
@@ -8,11 +8,12 @@ import WaterDroplets from '../../shared/components/WaterDroplets';
 import siteContent from '../../content.json';
 import { api } from '../../shared/config/api';
 
-const INGREDIENTS = siteContent.ingredients;
-const FRAGRANCES = siteContent.fragrances;
-const SIZES = siteContent.sizes;
-
 const CustomizationEngine = () => {
+  const [sizes, setSizes] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
+  const [fragrances, setFragrances] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [size, setSize] = useState('100g');
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [fragrance, setFragrance] = useState('oudh');
@@ -25,14 +26,43 @@ const CustomizationEngine = () => {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
-  const activeFragrance = FRAGRANCES.find(f => f.id === fragrance);
+  useEffect(() => {
+    const fetchOptions = async () => {
+      try {
+        const res = await fetch(`${api.products}/custom-options`);
+        const data = await res.json();
+        if (data.success) {
+          setSizes(data.options.sizes);
+          setIngredients(data.options.ingredients);
+          setFragrances(data.options.fragrances);
+          if (data.options.sizes.length > 0) setSize(data.options.sizes[0].id);
+          if (data.options.fragrances.length > 0) setFragrance(data.options.fragrances[0].id);
+        }
+      } catch (error) {
+        console.error('Failed to load custom options', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchOptions();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <Loader className="w-8 h-8 text-[#749c56] animate-spin" />
+      </div>
+    );
+  }
+
+  const activeFragrance = fragrances.find(f => f.id === fragrance) || fragrances[0];
   const fragrancePrice = activeFragrance ? activeFragrance.price : 0;
 
-  const activeSize = SIZES.find(s => s.id === size);
+  const activeSize = sizes.find(s => s.id === size) || sizes[0];
   const basePrice = activeSize ? activeSize.price : 60;
 
   const ingredientsPrice = selectedIngredients.reduce((total, id) => {
-    const item = INGREDIENTS.find(i => i.id === id);
+    const item = ingredients.find(i => i.id === id);
     return total + (item ? item.price : 0);
   }, 0);
   const unitPrice = basePrice + ingredientsPrice + fragrancePrice;
@@ -257,7 +287,7 @@ const CustomizationEngine = () => {
           <section>
             <h4 className="text-white/30 text-[10px] uppercase tracking-[0.4em] mb-6">{siteContent.customization.step1Title}</h4>
             <div className="grid grid-cols-2 gap-4">
-              {SIZES.map(s => (
+              {sizes.map(s => (
                 <motion.button
                   key={s.id}
                   whileHover={{ scale: 1.02 }}
@@ -294,7 +324,7 @@ const CustomizationEngine = () => {
           <section>
             <h4 className="text-white/30 text-[10px] uppercase tracking-[0.4em] mb-6">{siteContent.customization.step2Title}</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {INGREDIENTS.map(item => {
+              {ingredients.map(item => {
                 const isSelected = selectedIngredients.includes(item.id);
                 return (
                   <motion.button
@@ -323,7 +353,7 @@ const CustomizationEngine = () => {
           <section>
             <h4 className="text-white/30 text-[10px] uppercase tracking-[0.4em] mb-6">{siteContent.customization.step3Title}</h4>
             <div className="flex flex-wrap gap-3">
-              {FRAGRANCES.map(f => (
+              {fragrances.map(f => (
                 <motion.button
                   key={f.id}
                   whileHover={{ scale: 1.05 }}

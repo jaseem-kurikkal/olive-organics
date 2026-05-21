@@ -74,3 +74,32 @@ enum OrderStatus {
   SHIPPED
   DELIVERED
 }
+
+// --- CUSTOM ATELIER CONFIGURATION MODELS ---
+
+model CustomSize {
+  id        String   @id @default(uuid())
+  sizeId    String   @unique
+  name      String
+  price     Float
+  isActive  Boolean  @default(true)
+}
+
+model CustomIngredient {
+  id           String   @id @default(uuid())
+  ingredientId String   @unique
+  name         String
+  price        Float
+  desc         String
+  color        String
+  isActive     Boolean  @default(true)
+}
+
+model CustomFragrance {
+  id          String   @id @default(uuid())
+  fragranceId String   @unique
+  name        String
+  price       Float
+  color       String
+  isActive    Boolean  @default(true)
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Minus, Plus, X, ShoppingBag, ArrowRight, Check, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -8,8 +8,6 @@ import WaterDroplets from '../../shared/components/WaterDroplets';
 import siteContent from '../../content.json';
 import { api } from '../../shared/config/api';
 
-const INGREDIENTS = siteContent.ingredients;
-const FRAGRANCES = siteContent.fragrances;
 const cartText = siteContent.cart;
 
 const CartPage = () => {
@@ -18,10 +16,29 @@ const CartPage = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderSuccessData, setOrderSuccessData] = useState(null);
+  
+  const [ingredients, setIngredients] = useState([]);
+  const [fragrances, setFragrances] = useState([]);
 
-  const getFragranceName = (id) => FRAGRANCES.find(f => f.id === id)?.name || id;
-  const getFragranceColor = (id) => FRAGRANCES.find(f => f.id === id)?.color || '#749c56';
-  const getIngredientName = (id) => INGREDIENTS.find(i => i.id === id)?.name || id;
+  useEffect(() => {
+    const fetchOptions = async () => {
+      try {
+        const res = await fetch(`${api.products}/custom-options`);
+        const data = await res.json();
+        if (data.success) {
+          setIngredients(data.options.ingredients);
+          setFragrances(data.options.fragrances);
+        }
+      } catch (error) {
+        console.error('Failed to load custom options', error);
+      }
+    };
+    fetchOptions();
+  }, []);
+
+  const getFragranceName = (id) => fragrances.find(f => f.id === id)?.name || id;
+  const getFragranceColor = (id) => fragrances.find(f => f.id === id)?.color || '#749c56';
+  const getIngredientObj = (id) => ingredients.find(i => i.id === id);
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -278,19 +295,20 @@ const CartPage = () => {
                         {/* Ingredient tags */}
                         {isCustom && item.ingredients && item.ingredients.length > 0 && (
                           <div className="flex flex-wrap gap-1.5 mb-3">
-                            {item.ingredients.map(ingId => (
-                              <span
-                                key={ingId}
-                                className="px-2 py-0.5 rounded-full text-[9px] uppercase tracking-widest"
-                                style={{
-                                  background: 'rgba(255,255,255,0.05)',
-                                  border: '1px solid rgba(255,255,255,0.08)',
-                                  color: 'rgba(255,255,255,0.4)',
-                                }}
-                              >
-                                {getIngredientName(ingId)}
-                              </span>
-                            ))}
+                            {item.ingredients.map(ing => {
+                              const ingObj = getIngredientObj(ing);
+                              return (
+                                <div key={ing} className="bg-white/5 rounded-xl p-3 border border-white/10 relative overflow-hidden group">
+                                  <div className="relative z-10">
+                                    <div className="flex justify-between items-center mb-1">
+                                      <span className="text-white/80 font-medium text-sm">{ingObj?.name || ing}</span>
+                                      <span className="text-[10px] font-bold" style={{ color: fragranceColor }}>+₹{ingObj?.price || 0}</span>
+                                    </div>
+                                    <p className="text-white/40 text-[10px]">{ingObj?.desc || ''}</p>
+                                  </div>
+                                </div>
+                              );
+                            })}
                           </div>
                         )}
 
