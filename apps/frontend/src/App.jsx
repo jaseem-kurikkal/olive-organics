@@ -297,6 +297,15 @@ function AppContent() {
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/my-orders" element={<MyOrdersPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="*" element={
+            <div className="min-h-screen flex flex-col items-center justify-center text-center px-4" style={{ background: '#050a05' }}>
+              <h1 className="text-white text-6xl font-light mb-4" style={{ fontFamily: "'Cormorant Garamond', serif" }}>404</h1>
+              <p className="text-white/40 mb-8">The page you are looking for does not exist.</p>
+              <Link to="/" className="px-6 py-3 rounded-full text-white text-xs uppercase tracking-widest" style={{ background: 'linear-gradient(135deg, #496337, #749c56)' }}>
+                Return Home
+              </Link>
+            </div>
+          } />
         </Routes>
       </AnimatePresence>
     </>

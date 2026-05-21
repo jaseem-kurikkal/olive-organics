@@ -219,14 +219,16 @@ export default function AdminDashboard() {
               <div key={i} className="h-32 rounded-3xl animate-pulse" style={{ background: 'rgba(255,255,255,0.03)' }} />
             ))}
           </div>
-        ) : data ? (
+        ) : data?.success ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
             <StatCard icon={ShoppingBag} label="Total Orders" value={data.stats.totalOrders} color="#749c56" delay={0.1} />
             <StatCard icon={Users} label="Registered Users" value={data.stats.totalUsers} color="#9b72cf" delay={0.2} />
             <StatCard icon={DollarSign} label="Total Revenue" value={`$${data.stats.totalRevenue.toFixed(2)}`} color="#f59e0b" delay={0.3} />
           </div>
         ) : (
-          <div className="text-center text-white/30 py-10">Failed to load data. Check your Render backend.</div>
+          <div className="text-center text-white/30 py-10">
+            {data?.error || 'Failed to load data. Check your Render backend.'}
+          </div>
         )}
 
         {/* Tabs */}
