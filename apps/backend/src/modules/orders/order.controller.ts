@@ -1,11 +1,23 @@
 import { Request, Response } from 'express';
 import prisma from '../../config/db';
-
 import Stripe from 'stripe';
+import jwt from 'jsonwebtoken';
+
+const JWT_SECRET = process.env.JWT_SECRET || 'dev_jwt_secret_key';
 
 export const createOrder = async (req: Request, res: Response) => {
   try {
-    const { items, totalAmount, userId } = req.body;
+    const { items, totalAmount } = req.body;
+
+    // Extract userId from JWT token if logged in
+    let userId: string | null = null;
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith('Bearer ')) {
+      try {
+        const decoded: any = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
+        userId = decoded.id;
+      } catch { /* token invalid, treat as guest */ }
+    }
 
     // 1. Save order to PostgreSQL database
     const order = await prisma.order.create({

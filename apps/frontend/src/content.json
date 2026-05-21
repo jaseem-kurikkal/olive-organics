@@ -4,8 +4,7 @@
     "links": [
       { "label": "Home", "url": "/" },
       { "label": "Atelier", "url": "/build" },
-      { "label": "About", "url": "/ritual" },
-      { "label": "Sign In", "url": "/auth" }
+      { "label": "About", "url": "/ritual" }
     ]
   },
   "customization": {
