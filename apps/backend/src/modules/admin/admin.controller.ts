@@ -34,3 +34,25 @@ export const getAdminStats = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, error: 'Failed to fetch admin data' });
   }
 };
+
+export const updateOrderStatus = async (req: Request, res: Response) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    const validStatuses = ['PENDING_PAYMENT', 'PAID', 'PROCESSING', 'SHIPPED', 'DELIVERED'];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ success: false, error: 'Invalid status' });
+    }
+
+    const updatedOrder = await prisma.order.update({
+      where: { id: orderId as string },
+      data: { status: status as any },
+    });
+
+    res.json({ success: true, order: updatedOrder });
+  } catch (error) {
+    console.error('[Admin Update Order Error]', error);
+    res.status(500).json({ success: false, error: 'Failed to update order status' });
+  }
+};

@@ -32,7 +32,7 @@ const StatCard = ({ icon: Icon, label, value, color, delay }) => (
 );
 
 // ─── Status Badge ─────────────────────────────────────────────────────────────
-const StatusBadge = ({ status }) => {
+const StatusBadge = ({ status, onChange }) => {
   const colors = {
     PENDING_PAYMENT: { bg: '#f59e0b20', border: '#f59e0b40', text: '#f59e0b' },
     PAID: { bg: '#22c55e20', border: '#22c55e40', text: '#22c55e' },
@@ -41,6 +41,24 @@ const StatusBadge = ({ status }) => {
     DELIVERED: { bg: '#10b98120', border: '#10b98140', text: '#10b981' },
   };
   const c = colors[status] || colors.PENDING_PAYMENT;
+  
+  if (onChange) {
+    return (
+      <select
+        value={status}
+        onChange={e => onChange(e.target.value)}
+        className="text-[10px] font-medium px-3 py-1 rounded-full uppercase tracking-widest outline-none cursor-pointer appearance-none"
+        style={{ background: c.bg, border: `1px solid ${c.border}`, color: c.text }}
+      >
+        {Object.keys(colors).map(key => (
+          <option key={key} value={key} className="bg-[#050a05] text-white">
+            {key.replace('_', ' ')}
+          </option>
+        ))}
+      </select>
+    );
+  }
+
   return (
     <span className="text-[10px] font-medium px-3 py-1 rounded-full uppercase tracking-widest"
       style={{ background: c.bg, border: `1px solid ${c.border}`, color: c.text }}>
@@ -146,6 +164,31 @@ export default function AdminDashboard() {
       .catch(() => setLoading(false));
   }, [authed]);
 
+  const handleStatusChange = async (orderId, newStatus) => {
+    try {
+      const res = await fetch(`${API_BASE}/admin/orders/${orderId}/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-secret': ADMIN_SECRET
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+      const json = await res.json();
+      if (json.success) {
+        // Update local state
+        setData(prev => ({
+          ...prev,
+          orders: prev.orders.map(o => o.id === orderId ? { ...o, status: newStatus } : o)
+        }));
+      } else {
+        alert('Failed to update status');
+      }
+    } catch (e) {
+      alert('Error updating status');
+    }
+  };
+
   if (!authed) return <AdminLogin onLogin={handleLogin} />;
 
   return (
@@ -234,7 +277,12 @@ export default function AdminDashboard() {
                         </td>
                         <td className="px-6 py-4 text-white/50 text-sm">{order.items.length} item{order.items.length !== 1 ? 's' : ''}</td>
                         <td className="px-6 py-4 text-white text-sm">${order.totalAmount.toFixed(2)}</td>
-                        <td className="px-6 py-4"><StatusBadge status={order.status} /></td>
+                        <td className="px-6 py-4">
+                          <StatusBadge 
+                            status={order.status} 
+                            onChange={newStatus => handleStatusChange(order.id, newStatus)} 
+                          />
+                        </td>
                         <td className="px-6 py-4 text-white/30 text-xs flex items-center gap-1">
                           <Clock className="w-3 h-3" />
                           {new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
