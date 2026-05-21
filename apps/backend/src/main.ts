@@ -5,6 +5,7 @@ import { errorHandler } from './middlewares/errorHandler';
 import orderRoutes from './modules/orders/order.route';
 import userRoutes from './modules/users/user.route';
 import productRoutes from './modules/products/product.route';
+import adminRoutes from './modules/admin/admin.route';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -21,6 +22,7 @@ app.get('/api/v1/health', (req, res) => {
 app.use('/api/v1/orders', orderRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/products', productRoutes);
+app.use('/api/v1/admin', adminRoutes);
 
 // Global Error Handler
 app.use(errorHandler);

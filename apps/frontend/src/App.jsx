@@ -7,6 +7,7 @@ import CustomizationEngine from './features/customization/CustomizationEngine';
 import CartPage from './features/cart/CartPage';
 import RitualPage from './features/ritual/RitualPage';
 import AuthPage from './features/auth/AuthPage';
+import AdminDashboard from './features/admin/AdminDashboard';
 import ErrorBoundary from './shared/components/ErrorBoundary';
 import { WhyUsSection, TestimonialsSection, HomeCTA, NewsletterSection, SiteFooter } from './features/home/HomeSections';
 import { CartProvider, useCart } from './shared/context/CartContext';
@@ -179,6 +180,7 @@ function AppContent() {
             </>
           } />
           <Route path="/auth" element={<AuthPage />} />
+          <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </AnimatePresence>
     </>
