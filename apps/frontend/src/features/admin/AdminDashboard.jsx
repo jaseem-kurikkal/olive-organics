@@ -223,7 +223,7 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
             <StatCard icon={ShoppingBag} label="Total Orders" value={data.stats.totalOrders} color="#749c56" delay={0.1} />
             <StatCard icon={Users} label="Registered Users" value={data.stats.totalUsers} color="#9b72cf" delay={0.2} />
-            <StatCard icon={DollarSign} label="Total Revenue" value={`$${data.stats.totalRevenue.toFixed(2)}`} color="#f59e0b" delay={0.3} />
+            <StatCard icon={DollarSign} label="Total Revenue" value={`₹${data.stats.totalRevenue.toFixed(2)}`} color="#f59e0b" delay={0.3} />
           </div>
         ) : (
           <div className="text-center text-white/30 py-10">
@@ -278,7 +278,7 @@ export default function AdminDashboard() {
                           {order.user ? `${order.user.firstName} ${order.user.lastName}` : <span className="text-white/25 italic">Guest</span>}
                         </td>
                         <td className="px-6 py-4 text-white/50 text-sm">{order.items.length} item{order.items.length !== 1 ? 's' : ''}</td>
-                        <td className="px-6 py-4 text-white text-sm">${order.totalAmount.toFixed(2)}</td>
+                        <td className="px-6 py-4 text-white text-sm">₹{order.totalAmount.toFixed(2)}</td>
                         <td className="px-6 py-4">
                           <StatusBadge 
                             status={order.status} 

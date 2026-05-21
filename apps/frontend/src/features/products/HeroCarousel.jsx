@@ -263,7 +263,7 @@ const HeroCarousel = ({ onThemeChange }) => {
                 </motion.button>
                 <div className="flex flex-col">
                   <span className="text-white/30 text-[10px] uppercase tracking-widest">From</span>
-                  <span className="text-white font-serif text-2xl font-light">${currentProduct.basePrice}</span>
+                  <span className="text-white font-serif text-2xl font-light">₹{currentProduct.basePrice}</span>
                 </div>
               </motion.div>
             </motion.div>

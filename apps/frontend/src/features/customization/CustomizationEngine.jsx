@@ -10,11 +10,12 @@ import { api } from '../../shared/config/api';
 
 const INGREDIENTS = siteContent.ingredients;
 const FRAGRANCES = siteContent.fragrances;
+const SIZES = siteContent.sizes;
 
 const CustomizationEngine = () => {
   const [size, setSize] = useState('100g');
   const [selectedIngredients, setSelectedIngredients] = useState([]);
-  const [fragrance, setFragrance] = useState('lavender');
+  const [fragrance, setFragrance] = useState('oudh');
   const [quantity, setQuantity] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
@@ -25,12 +26,16 @@ const CustomizationEngine = () => {
   const navigate = useNavigate();
 
   const activeFragrance = FRAGRANCES.find(f => f.id === fragrance);
-  const basePrice = size === '100g' ? 18 : 15;
+  const fragrancePrice = activeFragrance ? activeFragrance.price : 0;
+
+  const activeSize = SIZES.find(s => s.id === size);
+  const basePrice = activeSize ? activeSize.price : 60;
+
   const ingredientsPrice = selectedIngredients.reduce((total, id) => {
     const item = INGREDIENTS.find(i => i.id === id);
     return total + (item ? item.price : 0);
   }, 0);
-  const unitPrice = basePrice + ingredientsPrice;
+  const unitPrice = basePrice + ingredientsPrice + fragrancePrice;
   const totalPrice = unitPrice * quantity;
 
   const toggleIngredient = (id) => {
@@ -252,25 +257,25 @@ const CustomizationEngine = () => {
           <section>
             <h4 className="text-white/30 text-[10px] uppercase tracking-[0.4em] mb-6">{siteContent.customization.step1Title}</h4>
             <div className="grid grid-cols-2 gap-4">
-              {['80g', '100g'].map(s => (
+              {SIZES.map(s => (
                 <motion.button
-                  key={s}
+                  key={s.id}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => setSize(s)}
+                  onClick={() => setSize(s.id)}
                   className="p-6 rounded-2xl text-left transition-all duration-500"
                   style={{
-                    background: size === s
+                    background: size === s.id
                       ? `${activeFragrance?.color || '#749c56'}15`
                       : 'rgba(255,255,255,0.03)',
-                    border: size === s
+                    border: size === s.id
                       ? `1px solid ${activeFragrance?.color || '#749c56'}40`
                       : '1px solid rgba(255,255,255,0.08)',
                   }}
                 >
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-white font-serif text-xl" style={{ fontFamily: "'Cormorant Garamond', serif" }}>{s} Bar</span>
-                    {size === s && (
+                    <span className="text-white font-serif text-xl" style={{ fontFamily: "'Cormorant Garamond', serif" }}>{s.name} Bar</span>
+                    {size === s.id && (
                       <div
                         className="w-5 h-5 rounded-full flex items-center justify-center"
                         style={{ background: activeFragrance?.color || '#749c56' }}
@@ -279,7 +284,7 @@ const CustomizationEngine = () => {
                       </div>
                     )}
                   </div>
-                  <span className="text-white/30 text-xs">{s === '100g' ? '$18 base' : '$15 base'}</span>
+                  <span className="text-white/30 text-xs">₹{s.price} base</span>
                 </motion.button>
               ))}
             </div>
@@ -305,7 +310,7 @@ const CustomizationEngine = () => {
                   >
                     <div className="flex justify-between items-start mb-1">
                       <span className="text-white/80 font-medium text-sm">{item.name}</span>
-                      <span className="text-[11px] font-bold" style={{ color: item.color }}>+${item.price}</span>
+                      <span className="text-[11px] font-bold" style={{ color: item.color }}>+₹{item.price}</span>
                     </div>
                     <p className="text-white/25 text-xs">{item.desc}</p>
                   </motion.button>
@@ -332,7 +337,7 @@ const CustomizationEngine = () => {
                     boxShadow: fragrance === f.id ? `0 0 20px ${f.color}20` : 'none',
                   }}
                 >
-                  {f.name}
+                  {f.name} {f.price > 0 ? `— ₹${f.price}` : ''}
                 </motion.button>
               ))}
             </div>
@@ -340,6 +345,7 @@ const CustomizationEngine = () => {
 
           {/* Divider */}
           <div className="divider-luxury" />
+
 
           {/* Qty + Buttons */}
           <section className="space-y-4">
@@ -387,7 +393,7 @@ const CustomizationEngine = () => {
                 ) : (
                   <>
                     <ShoppingBag className="w-4 h-4" />
-                    {siteContent.customization.addToCartText} — ${totalPrice}
+                    {siteContent.customization.addToCartText} — ₹{totalPrice}
                   </>
                 )}
               </motion.button>
@@ -405,7 +411,7 @@ const CustomizationEngine = () => {
                 boxShadow: `0 20px 60px ${activeFragrance?.color || '#749c56'}30`,
               }}
             >
-              {isSubmitting ? siteContent.customization.processingText : `${siteContent.customization.buyNowText} — $${totalPrice}`}
+              {isSubmitting ? siteContent.customization.processingText : `${siteContent.customization.buyNowText} — ₹${totalPrice}`}
             </motion.button>
           </section>
         </div>

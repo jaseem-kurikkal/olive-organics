@@ -321,7 +321,7 @@ const CartPage = () => {
                             className="text-white font-light text-xl"
                             style={{ fontFamily: "'Cormorant Garamond', serif" }}
                           >
-                            ${item.unitPrice * item.quantity}
+                            ₹{item.unitPrice * item.quantity}
                           </span>
                         </div>
                       </div>
@@ -366,7 +366,7 @@ const CartPage = () => {
               <div className="space-y-4 mb-8">
                 <div className="flex justify-between text-sm">
                   <span className="text-white/40">{cartText.subtotalText} ({cartCount} items)</span>
-                  <span className="text-white/70">${cartTotal}</span>
+                  <span className="text-white/70">₹{cartTotal}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-white/40">{cartText.shippingText}</span>
@@ -379,7 +379,7 @@ const CartPage = () => {
                     className="text-white font-light"
                     style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '2.5rem' }}
                   >
-                    ${cartTotal}
+                    ₹{cartTotal}
                   </span>
                 </div>
               </div>

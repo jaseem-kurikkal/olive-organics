@@ -41,21 +41,25 @@
     "checkoutButtonText": "Proceed to Checkout",
     "continueShoppingText": "Continue Shopping"
   },
+  "sizes": [
+    { "id": "100g", "name": "100g", "price": 60 },
+    { "id": "80g", "name": "80g", "price": 40 }
+  ],
   "ingredients": [
-    { "id": "shea", "name": "Shea Butter", "price": 3, "desc": "Extra moisture for dry skin.", "color": "#d4a373" },
-    { "id": "charcoal", "name": "Activated Charcoal", "price": 2, "desc": "Deep pore cleansing.", "color": "#424242" },
-    { "id": "oatmeal", "name": "Colloidal Oatmeal", "price": 2, "desc": "Soothes irritation and eczema.", "color": "#c8a96e" },
-    { "id": "honey", "name": "Manuka Honey", "price": 4, "desc": "Antibacterial and healing.", "color": "#f9a825" },
-    { "id": "rosewater", "name": "Rose Water", "price": 3, "desc": "Balances pH and brightens.", "color": "#e91e8c" },
-    { "id": "neem", "name": "Neem Extract", "price": 2, "desc": "Antibacterial Ayurvedic herb.", "color": "#388e3c" }
+    { "id": "shea", "name": "Shea Butter", "price": 24, "desc": "Extra moisture for dry skin.", "color": "#d4a373" },
+    { "id": "charcoal", "name": "Activated Charcoal", "price": 18, "desc": "Deep pore cleansing.", "color": "#424242" },
+    { "id": "oatmeal", "name": "Colloidal Oatmeal", "price": 44, "desc": "Soothes irritation and eczema.", "color": "#c8a96e" },
+    { "id": "honey", "name": "Manuka Honey", "price": 54, "desc": "Antibacterial and healing.", "color": "#f9a825" },
+    { "id": "rosewater", "name": "Rose Water", "price": 12, "desc": "Balances pH and brightens.", "color": "#e91e8c" },
+    { "id": "neem", "name": "Neem Extract", "price": 8, "desc": "Antibacterial Ayurvedic herb.", "color": "#388e3c" }
   ],
   "fragrances": [
-    { "id": "lavender", "name": "French Lavender", "color": "#9b72cf" },
-    { "id": "sandalwood", "name": "Red Sandalwood", "color": "#8b5a2b" },
-    { "id": "citrus", "name": "Citrus Burst", "color": "#fbc02d" },
-    { "id": "rose", "name": "Damascus Rose", "color": "#e91e8c" },
-    { "id": "mint", "name": "Arctic Mint", "color": "#558b2f" },
-    { "id": "unscented", "name": "Unscented", "color": "#757575" }
+    { "id": "oudh", "name": "Oudh", "price": 10, "color": "#5c4033" },
+    { "id": "sandalwood", "name": "Sandalwood", "price": 10, "color": "#8b5a2b" },
+    { "id": "rose", "name": "Rose", "price": 10, "color": "#e91e8c" },
+    { "id": "lilly", "name": "Lilly", "price": 10, "color": "#cfcaca" },
+    { "id": "jasmine", "name": "Jasmine", "price": 10, "color": "#f0e6d2" },
+    { "id": "unscented", "name": "Unscented", "price": 0, "color": "#757575" }
   ],
   "ritual": {
     "heroTag": "Our Story",

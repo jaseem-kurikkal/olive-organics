@@ -46,7 +46,7 @@ const OrderCard = ({ order }) => {
         </div>
         <div className="flex items-center gap-4">
           <span className="text-white text-xl font-light" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-            ${order.totalAmount.toFixed(2)}
+            ₹{order.totalAmount.toFixed(2)}
           </span>
           <span className="text-[10px] font-medium px-3 py-1 rounded-full uppercase tracking-widest"
             style={{ background: s.bg, border: `1px solid ${s.border}`, color: s.text }}>
@@ -100,7 +100,7 @@ const OrderCard = ({ order }) => {
                       <p className="text-white/25 text-xs">Size: {item.customizations.size}</p>
                     )}
                   </div>
-                  <p className="text-white/70 text-sm">${(item.unitPrice * item.quantity).toFixed(2)}</p>
+                  <p className="text-white/70 text-sm">₹{(item.unitPrice * item.quantity).toFixed(2)}</p>
                 </div>
               );
             })}
