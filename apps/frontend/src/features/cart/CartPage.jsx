@@ -50,16 +50,19 @@ const CartPage = () => {
     const payload = {
       totalAmount: cartTotal,
       userId: JSON.parse(localStorage.getItem('olive_user') || 'null')?.id || null,
-      items: cartItems.map(item => ({
-        productId: 'custom-atelier-build',
-        quantity: item.quantity,
-        unitPrice: item.unitPrice,
-        customizations: {
-          size: item.size,
-          ingredients: item.ingredients,
-          fragrance: item.fragrance
-        }
-      }))
+      items: cartItems.map(item => {
+        const isCustom = !item.productId || item.productId === 'custom-atelier-build';
+        return {
+          productId: isCustom ? 'custom-atelier-build' : item.productId,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          customizations: isCustom ? {
+            size: item.size,
+            ingredients: item.ingredients,
+            fragrance: item.fragrance
+          } : { name: item.name }
+        };
+      })
     };
 
     try {
@@ -207,7 +210,10 @@ const CartPage = () => {
           <div className="lg:col-span-7 space-y-4">
             <AnimatePresence>
               {cartItems.map((item, index) => {
-                const fragranceColor = getFragranceColor(item.fragrance);
+                const isCustom = !item.productId || item.productId === 'custom-atelier-build';
+                const fragranceColor = isCustom ? getFragranceColor(item.fragrance) : item.themeColor || '#749c56';
+                const itemName = isCustom ? `Bespoke ${getFragranceName(item.fragrance)}` : item.name;
+
                 return (
                   <motion.div
                     key={item.cartId}
@@ -253,11 +259,13 @@ const CartPage = () => {
                               className="text-white font-light text-lg"
                               style={{ fontFamily: "'Cormorant Garamond', serif" }}
                             >
-                              Bespoke {getFragranceName(item.fragrance)}
+                              {itemName}
                             </h3>
-                            <p className="text-white/30 text-xs mt-0.5">
-                              {cartText.itemSizeLabel}: {item.size}
-                            </p>
+                            {isCustom && (
+                              <p className="text-white/30 text-xs mt-0.5">
+                                {cartText.itemSizeLabel}: {item.size}
+                              </p>
+                            )}
                           </div>
                           <button
                             onClick={() => removeFromCart(item.cartId)}
@@ -268,7 +276,7 @@ const CartPage = () => {
                         </div>
 
                         {/* Ingredient tags */}
-                        {item.ingredients.length > 0 && (
+                        {isCustom && item.ingredients && item.ingredients.length > 0 && (
                           <div className="flex flex-wrap gap-1.5 mb-3">
                             {item.ingredients.map(ingId => (
                               <span

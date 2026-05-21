@@ -9,6 +9,7 @@ import RitualPage from './features/ritual/RitualPage';
 import AuthPage from './features/auth/AuthPage';
 import AdminDashboard from './features/admin/AdminDashboard';
 import MyOrdersPage from './features/orders/MyOrdersPage';
+import ProductsPage from './features/products/ProductsPage';
 import ErrorBoundary from './shared/components/ErrorBoundary';
 import { WhyUsSection, TestimonialsSection, HomeCTA, NewsletterSection, SiteFooter } from './features/home/HomeSections';
 import { CartProvider, useCart } from './shared/context/CartContext';
@@ -247,6 +248,12 @@ function AppContent() {
               <NewsletterSection />
               <SiteFooter />
             </div>
+          } />
+          <Route path="/shop" element={
+            <>
+              <ProductsPage />
+              <div style={{ background: '#050a05' }}><SiteFooter /></div>
+            </>
           } />
           <Route path="/build" element={
             <div className="min-h-screen" style={{ background: '#050a05' }}>

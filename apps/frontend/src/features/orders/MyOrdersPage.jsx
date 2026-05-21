@@ -89,17 +89,21 @@ const OrderCard = ({ order }) => {
           {/* Items */}
           <p className="text-white/30 text-[10px] uppercase tracking-widest mb-3">Items ({order.items.length})</p>
           <div className="space-y-2">
-            {order.items.map(item => (
-              <div key={item.id} className="flex justify-between items-center py-2 border-b border-white/05 last:border-0">
-                <div>
-                  <p className="text-white/60 text-sm">Custom Formulation × {item.quantity}</p>
-                  {item.customizations?.size && (
-                    <p className="text-white/25 text-xs">Size: {item.customizations.size}</p>
-                  )}
+            {order.items.map(item => {
+              const isCustom = item.productId === 'custom-atelier-build';
+              const name = item.customizations?.name || 'Custom Formulation';
+              return (
+                <div key={item.id} className="flex justify-between items-center py-2 border-b border-white/05 last:border-0">
+                  <div>
+                    <p className="text-white/60 text-sm">{name} × {item.quantity}</p>
+                    {isCustom && item.customizations?.size && (
+                      <p className="text-white/25 text-xs">Size: {item.customizations.size}</p>
+                    )}
+                  </div>
+                  <p className="text-white/70 text-sm">${(item.unitPrice * item.quantity).toFixed(2)}</p>
                 </div>
-                <p className="text-white/70 text-sm">${(item.unitPrice * item.quantity).toFixed(2)}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}

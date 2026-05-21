@@ -11,9 +11,14 @@ export const CartProvider = ({ children }) => {
     setCartItems(prev => {
       // Check if same config already exists
       const existingIndex = prev.findIndex(
-        ci => ci.size === item.size &&
-              ci.fragrance === item.fragrance &&
-              JSON.stringify(ci.ingredients) === JSON.stringify(item.ingredients)
+        ci => {
+          if (item.productId && item.productId !== 'custom-atelier-build') {
+             return ci.productId === item.productId;
+          }
+          return ci.size === item.size &&
+                ci.fragrance === item.fragrance &&
+                JSON.stringify(ci.ingredients) === JSON.stringify(item.ingredients);
+        }
       );
       if (existingIndex >= 0) {
         const updated = [...prev];

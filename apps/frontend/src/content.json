@@ -3,6 +3,7 @@
     "brandName": "Olive Organics",
     "links": [
       { "label": "Home", "url": "/" },
+      { "label": "Shop", "url": "/shop" },
       { "label": "Atelier", "url": "/build" },
       { "label": "About", "url": "/ritual" }
     ]

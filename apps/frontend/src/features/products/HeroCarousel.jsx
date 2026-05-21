@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import { ArrowRight, Droplets, Sparkles, Wind, Leaf, Flame, Sun, Moon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../../shared/context/CartContext';
 import WaterDroplets from '../../shared/components/WaterDroplets';
 import { api } from '../../shared/config/api';
 
@@ -10,6 +11,7 @@ const HeroCarousel = ({ onThemeChange }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   // Fetch Dynamic Products from Database
   useEffect(() => {
@@ -241,7 +243,18 @@ const HeroCarousel = ({ onThemeChange }) => {
                 <motion.button
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.97 }}
-                  onClick={() => navigate('/build')}
+                  onClick={() => {
+                    addToCart({
+                      productId: currentProduct.id,
+                      name: currentProduct.name,
+                      themeColor: currentProduct.themeColor,
+                      quantity: 1,
+                      unitPrice: currentProduct.basePrice,
+                      ingredients: [],
+                      size: '100g', // default size
+                    });
+                    navigate('/cart');
+                  }}
                   className="group relative px-10 py-5 overflow-hidden rounded-full text-white font-semibold tracking-wide text-sm"
                   style={{
                     background: `linear-gradient(135deg, ${currentProduct.accentColor}, ${currentProduct.buttonColor})`,
@@ -250,7 +263,7 @@ const HeroCarousel = ({ onThemeChange }) => {
                 >
                   <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out rounded-full" />
                   <span className="relative flex items-center space-x-3">
-                    <span>Craft Yours — ${currentProduct.basePrice}</span>
+                    <span>Add to Cart — ${currentProduct.basePrice}</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
                   </span>
                 </motion.button>
