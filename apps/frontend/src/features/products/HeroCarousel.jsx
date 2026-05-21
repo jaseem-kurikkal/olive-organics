@@ -208,14 +208,13 @@ const HeroCarousel = ({ onThemeChange }) => {
                 {currentProduct.description}
               </motion.p>
 
-              {/* Ingredients */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
                 className="flex flex-wrap gap-2"
               >
-                {currentProduct.ingredients.map((ing, i) => (
+                {currentProduct?.ingredients?.map((ing, i) => (
                   <span
                     key={i}
                     className="px-3 py-1 text-[10px] font-medium tracking-widest uppercase rounded-full"

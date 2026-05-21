@@ -122,7 +122,7 @@ const ProductsPage = () => {
                 </p>
 
                 <div className="flex flex-wrap gap-2 mb-8">
-                  {product.ingredients.slice(0, 3).map((ing, i) => (
+                  {product.ingredients && product.ingredients.slice(0, 3).map((ing, i) => (
                     <span
                       key={i}
                       className="px-2 py-1 text-[9px] uppercase tracking-widest rounded-full"
