@@ -133,7 +133,7 @@ const HeroCarousel = ({ onThemeChange }) => {
       <div className="relative z-20 w-full max-w-[1600px] mx-auto px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center min-h-screen py-32">
 
         {/* LEFT: TEXT CONTENT */}
-        <div className="lg:col-span-5 flex flex-col space-y-8">
+        <div className="order-2 lg:order-1 lg:col-span-5 flex flex-col space-y-8 mt-12 lg:mt-0">
           <AnimatePresence mode="popLayout">
             <motion.div
               key={currentProduct.id}
@@ -199,11 +199,10 @@ const HeroCarousel = ({ onThemeChange }) => {
 
               {/* Description */}
               <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 transition={{ delay: 0.4, duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
-                className="text-white/65 leading-relaxed font-light max-w-md"
-                style={{ fontSize: 'clamp(0.95rem, 1.5vw, 1.15rem)' }}
+                className="text-white/70 text-sm md:text-base leading-relaxed max-w-md font-light"
               >
                 {currentProduct.description}
               </motion.p>
@@ -219,9 +218,9 @@ const HeroCarousel = ({ onThemeChange }) => {
                     key={i}
                     className="px-3 py-1 text-[10px] font-medium tracking-widest uppercase rounded-full"
                     style={{
-                      background: 'rgba(255,255,255,0.05)',
-                      border: '1px solid rgba(255,255,255,0.1)',
-                      color: 'rgba(255,255,255,0.5)'
+                      background: 'rgba(255,255,255,0.03)',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      color: 'rgba(255,255,255,0.4)',
                     }}
                   >
                     {ing}
@@ -232,16 +231,16 @@ const HeroCarousel = ({ onThemeChange }) => {
               {/* Divider */}
               <div className="divider-luxury" />
 
-              {/* CTA Row */}
+              {/* Action Area */}
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
                 className="flex items-center space-x-6"
               >
                 <motion.button
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.97 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => {
                     addToCart({
                       productId: currentProduct.id,
@@ -254,19 +253,14 @@ const HeroCarousel = ({ onThemeChange }) => {
                     });
                     navigate('/cart');
                   }}
-                  className="group relative px-10 py-5 overflow-hidden rounded-full text-white font-semibold tracking-wide text-sm"
-                  style={{
-                    background: `linear-gradient(135deg, ${currentProduct.accentColor}, ${currentProduct.buttonColor})`,
-                    boxShadow: `0 20px 60px ${currentProduct.accentColor}40`
-                  }}
+                  className="px-8 py-4 rounded-full text-white text-xs font-bold uppercase tracking-widest flex items-center space-x-3 shadow-2xl relative overflow-hidden group"
+                  style={{ background: currentProduct.accentColor }}
                 >
-                  <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out rounded-full" />
-                  <span className="relative flex items-center space-x-3">
-                    <span>Add to Cart — ${currentProduct.basePrice}</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
+                  <span className="relative z-10 flex items-center gap-2">
+                    Add to Cart <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </span>
+                  <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
                 </motion.button>
-
                 <div className="flex flex-col">
                   <span className="text-white/30 text-[10px] uppercase tracking-widest">From</span>
                   <span className="text-white font-serif text-2xl font-light">${currentProduct.basePrice}</span>
@@ -279,7 +273,7 @@ const HeroCarousel = ({ onThemeChange }) => {
         {/* RIGHT: 3D SOAP CAROUSEL */}
         <div
           ref={containerRef}
-          className="hidden lg:flex lg:col-span-7 justify-center items-center h-[700px] relative"
+          className="order-1 lg:order-2 flex lg:col-span-7 justify-center items-center h-[350px] lg:h-[700px] relative w-full overflow-hidden lg:overflow-visible"
           onMouseMove={handleMouse}
           onMouseLeave={handleMouseLeave}
           onMouseEnter={() => setIsHovering(true)}
@@ -289,11 +283,13 @@ const HeroCarousel = ({ onThemeChange }) => {
             const offset = getOffset(idx);
             if (Math.abs(offset) > 3) return null;
 
+            const isMobile = window.innerWidth < 1024;
             const isActive = offset === 0;
-            const translateX = offset * 240;
-            const translateZ = isActive ? 150 : -300 - Math.abs(offset) * 60;
+            const translateX = offset * (isMobile ? 140 : 240);
+            const translateZ = isActive ? (isMobile ? 0 : 150) : -300 - Math.abs(offset) * 60;
             const rotateYBase = offset * -28;
-            const scale = isActive ? 1.05 : 0.78 - Math.abs(offset) * 0.04;
+            const baseScale = isMobile ? 0.7 : 1;
+            const scale = (isActive ? 1.05 : 0.78 - Math.abs(offset) * 0.04) * baseScale;
             const opacity = isActive ? 1 : Math.max(0, 0.35 - Math.abs(offset) * 0.08);
             const zIndex = 30 - Math.abs(offset) * 10;
             const blur = isActive ? 0 : 10 + Math.abs(offset) * 3;
@@ -315,7 +311,7 @@ const HeroCarousel = ({ onThemeChange }) => {
                   filter: `blur(${blur}px)`,
                 }}
                 transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
-                className="absolute w-80 aspect-[3/4] cursor-pointer"
+                className="absolute w-[260px] lg:w-80 aspect-[3/4] cursor-pointer"
                 onClick={() => goTo(idx)}
               >
                 {/* Ground shadow */}
@@ -323,14 +319,14 @@ const HeroCarousel = ({ onThemeChange }) => {
                   <motion.div
                     initial={{ opacity: 0, scale: 0.5 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-64 h-10 blur-3xl rounded-full"
+                    className="absolute -bottom-10 lg:-bottom-20 left-1/2 -translate-x-1/2 w-48 lg:w-64 h-10 blur-2xl lg:blur-3xl rounded-full"
                     style={{ background: `${currentProduct.accentColor}40` }}
                   />
                 )}
 
                 {/* Card */}
                 <div
-                  className="relative w-full h-full rounded-3xl overflow-hidden"
+                  className="relative w-full h-full rounded-[2rem] lg:rounded-3xl overflow-hidden"
                   style={{
                     background: isActive
                       ? `linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))`
