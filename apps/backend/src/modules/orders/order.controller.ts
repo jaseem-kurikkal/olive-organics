@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import prisma from '../../config/db';
-import Stripe from 'stripe';
+import Razorpay from 'razorpay';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_jwt_secret_key';
 
@@ -39,45 +40,61 @@ export const createOrder = async (req: Request, res: Response) => {
       },
     });
 
-    // 2. Initialize Stripe (We check for a real key, otherwise use Demo Mode)
-    const stripeKey = process.env.STRIPE_SECRET_KEY;
+    // 2. Initialize Razorpay (We check for a real key, otherwise use Demo Mode)
+    const razorpayKeyId = process.env.RAZORPAY_KEY_ID;
+    const razorpayKeySecret = process.env.RAZORPAY_KEY_SECRET;
     
-    if (stripeKey && stripeKey.startsWith('sk_')) {
-      const stripe = new Stripe(stripeKey, { apiVersion: '2023-10-16' as any });
+    if (razorpayKeyId && razorpayKeySecret) {
+      const razorpay = new Razorpay({
+        key_id: razorpayKeyId,
+        key_secret: razorpayKeySecret
+      });
       
-      const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
-        line_items: items.map((item: any) => ({
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: item.productId === 'custom-atelier-build' ? 'Bespoke Atelier Formulation' : 'Olive Organics Product',
-              description: item.customizations ? `Size: ${item.customizations?.size} | Fragrance: ${item.customizations?.fragrance}` : '',
-            },
-            unit_amount: Math.round(item.unitPrice * 100), // Stripe expects cents
-          },
-          quantity: item.quantity,
-        })),
-        mode: 'payment',
-        success_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/my-orders?payment=success`,
-        cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/cart`,
-        client_reference_id: order.id,
+      const rzpOrder = await razorpay.orders.create({
+        amount: Math.round(totalAmount * 100), // amount in smallest currency unit (paise for INR, cents for USD)
+        currency: 'USD', // You can change to INR if you want to charge in Rupees
+        receipt: order.id,
       });
 
-      return res.status(201).json({ success: true, order, stripeUrl: session.url });
+      return res.status(201).json({ success: true, order, razorpayOrderId: rzpOrder.id, razorpayKeyId });
     }
 
-    // 3. Fallback Demo Mode if no Stripe Key is provided yet
+    // 3. Fallback Demo Mode if no Razorpay Key is provided yet
     res.status(201).json({ 
       success: true, 
       order, 
-      stripeUrl: null, // Indicates demo mode
+      razorpayOrderId: null, // Indicates demo mode
       paymentQrCodeUrl: `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=pay_olive_${order.id}`
     });
 
   } catch (error) {
-    console.error('[Stripe Order Error]', error);
+    console.error('[Razorpay Order Error]', error);
     res.status(500).json({ success: false, error: 'Failed to process order checkout' });
+  }
+};
+
+export const verifyPayment = async (req: Request, res: Response) => {
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderId } = req.body;
+    
+    const razorpayKeySecret = process.env.RAZORPAY_KEY_SECRET;
+    if (!razorpayKeySecret) return res.status(500).json({ error: 'Razorpay secret missing' });
+
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSignature = crypto.createHmac('sha256', razorpayKeySecret).update(body.toString()).digest('hex');
+
+    if (expectedSignature === razorpay_signature) {
+      // Signature is valid, update order status
+      await prisma.order.update({
+        where: { id: orderId },
+        data: { status: 'PAID' }
+      });
+      res.json({ success: true });
+    } else {
+      res.status(400).json({ success: false, error: 'Invalid signature' });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Payment verification failed' });
   }
 };
 

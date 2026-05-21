@@ -23,6 +23,17 @@ const CartPage = () => {
   const getFragranceColor = (id) => FRAGRANCES.find(f => f.id === id)?.color || '#749c56';
   const getIngredientName = (id) => INGREDIENTS.find(i => i.id === id)?.name || id;
 
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) return resolve(true);
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
   const handleCheckout = async () => {
     if (cartItems.length === 0) return;
 
@@ -62,8 +73,43 @@ const CartPage = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        if (data.stripeUrl) {
-          window.location.href = data.stripeUrl;
+        if (data.razorpayOrderId) {
+          const res = await loadRazorpayScript();
+          if (!res) {
+            alert('Razorpay SDK failed to load. Are you online?');
+            setIsSubmitting(false);
+            return;
+          }
+
+          const options = {
+            key: data.razorpayKeyId,
+            amount: Math.round(cartTotal * 100),
+            currency: "USD",
+            name: "Olive Organics",
+            description: "Custom Formulation Checkout",
+            order_id: data.razorpayOrderId,
+            handler: async function (paymentResponse) {
+              try {
+                await fetch(`${api.orders}/verify`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ ...paymentResponse, orderId: data.order.id })
+                });
+                clearCart();
+                navigate('/my-orders?payment=success');
+              } catch (e) {
+                alert('Payment verification failed');
+              }
+            },
+            theme: {
+              color: "#749c56"
+            }
+          };
+          const rzp = new window.Razorpay(options);
+          rzp.on('payment.failed', function (paymentResponse) {
+            alert(paymentResponse.error.description);
+          });
+          rzp.open();
         } else {
           setOrderSuccessData(data);
           clearCart();
