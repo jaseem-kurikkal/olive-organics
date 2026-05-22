@@ -44,9 +44,12 @@ html.light-theme body {
   background: #050a05; /* Keep base, filter will invert it to light mint */
 }
 
-/* Re-invert specific colorful elements so they look normal */
+/* Re-invert specific elements so they look normal */
+html.light-theme img,
+html.light-theme video,
+html.light-theme canvas,
 html.light-theme .keep-color {
-  filter: invert(1) hue-rotate(180deg);
+  filter: invert(1) hue-rotate(180deg) !important;
 }
 
 /* ============================================
