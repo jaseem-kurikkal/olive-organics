@@ -84,7 +84,33 @@ const HeroCarousel = ({ onThemeChange }) => {
   }, [currentIndex, onThemeChange, products]);
 
   if (loading || products.length === 0) {
-    return <div className="min-h-screen flex items-center justify-center text-white">Loading Atelier...</div>;
+    return (
+      <div className="min-h-screen bg-[#050a05] w-full flex items-center justify-center overflow-hidden">
+        <div className="w-full max-w-[1600px] mx-auto px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center min-h-screen py-32">
+          {/* Skeleton Text Content */}
+          <div className="order-2 lg:order-1 lg:col-span-5 flex flex-col space-y-8 mt-12 lg:mt-0">
+            <div className="w-24 h-6 bg-white/5 rounded-full animate-pulse" />
+            <div className="w-3/4 h-24 bg-white/5 rounded-lg animate-pulse" />
+            <div className="w-1/2 h-4 bg-white/5 rounded-full animate-pulse" />
+            <div className="space-y-3">
+              <div className="w-full h-4 bg-white/5 rounded-full animate-pulse" />
+              <div className="w-5/6 h-4 bg-white/5 rounded-full animate-pulse" />
+              <div className="w-4/6 h-4 bg-white/5 rounded-full animate-pulse" />
+            </div>
+            <div className="flex gap-4">
+              <div className="w-32 h-12 bg-white/5 rounded-full animate-pulse" />
+              <div className="w-20 h-12 bg-white/5 rounded-full animate-pulse" />
+            </div>
+          </div>
+          {/* Skeleton Image Carousel */}
+          <div className="order-1 lg:order-2 lg:col-span-7 h-[50vh] lg:h-[80vh] flex items-center justify-center relative">
+            <div className="w-64 h-80 md:w-80 md:h-[400px] bg-white/5 rounded-[40px] animate-pulse" />
+            <div className="absolute right-0 opacity-50 w-48 h-64 bg-white/5 rounded-[30px] animate-pulse translate-x-12 scale-90" />
+            <div className="absolute left-0 opacity-50 w-48 h-64 bg-white/5 rounded-[30px] animate-pulse -translate-x-12 scale-90" />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const currentProduct = products[currentIndex];
