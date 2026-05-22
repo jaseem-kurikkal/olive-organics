@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, LogOut, Package, ChevronDown, Loader } from 'lucide-react';
+import { Menu, X, LogOut, Package, ChevronDown, Loader, Sun, Moon } from 'lucide-react';
 const HeroCarousel = React.lazy(() => import('./features/products/HeroCarousel'));
 const CustomizationEngine = React.lazy(() => import('./features/customization/CustomizationEngine'));
 const CartPage = React.lazy(() => import('./features/cart/CartPage'));
@@ -112,8 +112,17 @@ function UserMenu({ onClose }) {
 function AppContent() {
   const [themeColor, setThemeColor] = useState('#1a0a2e');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [appTheme, setAppTheme] = useState('dark');
   const { cartCount } = useCart();
   const { isLoggedIn } = useAuth();
+
+  useEffect(() => {
+    if (appTheme === 'light') {
+      document.documentElement.classList.add('light-theme');
+    } else {
+      document.documentElement.classList.remove('light-theme');
+    }
+  }, [appTheme]);
 
   const closeMobile = () => setMobileMenuOpen(false);
 
@@ -136,7 +145,7 @@ function AppContent() {
           {/* Logo */}
           <Link to="/" onClick={closeMobile} className="flex items-center space-x-3 group">
             <div
-              className="w-9 h-9 rounded-full flex items-center justify-center font-serif font-medium text-white text-sm shadow-lg group-hover:scale-110 transition-transform duration-500"
+              className="w-9 h-9 rounded-full flex items-center justify-center font-serif font-medium text-white text-sm shadow-lg group-hover:scale-110 transition-transform duration-500 keep-color"
               style={{
                 background: 'linear-gradient(135deg, #496337, #749c56)',
                 boxShadow: '0 0 20px rgba(73,99,55,0.5)'
@@ -144,7 +153,7 @@ function AppContent() {
             >
               O
             </div>
-            <div className="font-serif text-2xl tracking-widest text-white mix-blend-difference pointer-events-auto cursor-pointer" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+            <div className="font-serif text-2xl tracking-widest text-white mix-blend-difference pointer-events-auto cursor-pointer keep-color" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
               {siteContent.navigation.brandName}
             </div>
           </Link>
@@ -157,6 +166,14 @@ function AppContent() {
           </nav>
 
           <div className="flex items-center gap-4">
+            {/* Theme Toggle */}
+            <button
+              onClick={() => setAppTheme(t => t === 'dark' ? 'light' : 'dark')}
+              className="p-2 text-white/50 hover:text-white transition-colors rounded-full hover:bg-white/5"
+            >
+              {appTheme === 'dark' ? <Sun className="w-5 h-5 keep-color" /> : <Moon className="w-5 h-5 keep-color" />}
+            </button>
+
             {/* Cart Button */}
             <Link to="/cart" onClick={closeMobile}>
               <motion.div

@@ -33,6 +33,23 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: #050a05;
   overflow-x: hidden;
+  transition: filter 0.5s ease, background-color 0.5s ease;
+}
+
+/* ============================================
+   SMART INVERT LIGHT THEME
+   ============================================ */
+html.light-theme body {
+  filter: invert(1) hue-rotate(180deg);
+  background: #050a05; /* Keep base, filter will invert it to light mint */
+}
+
+/* Re-invert images, videos, and specific colorful elements so they look normal */
+html.light-theme img,
+html.light-theme video,
+html.light-theme .shimmer-text,
+html.light-theme .keep-color {
+  filter: invert(1) hue-rotate(180deg);
 }
 
 /* ============================================
