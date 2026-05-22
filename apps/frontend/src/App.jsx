@@ -1,15 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, LogOut, Package, ChevronDown } from 'lucide-react';
-import HeroCarousel from './features/products/HeroCarousel';
-import CustomizationEngine from './features/customization/CustomizationEngine';
-import CartPage from './features/cart/CartPage';
-import RitualPage from './features/ritual/RitualPage';
-import AuthPage from './features/auth/AuthPage';
-import AdminDashboard from './features/admin/AdminDashboard';
-import MyOrdersPage from './features/orders/MyOrdersPage';
-import ProductsPage from './features/products/ProductsPage';
+import { Menu, X, LogOut, Package, ChevronDown, Loader } from 'lucide-react';
+const HeroCarousel = React.lazy(() => import('./features/products/HeroCarousel'));
+const CustomizationEngine = React.lazy(() => import('./features/customization/CustomizationEngine'));
+const CartPage = React.lazy(() => import('./features/cart/CartPage'));
+const RitualPage = React.lazy(() => import('./features/ritual/RitualPage'));
+const AuthPage = React.lazy(() => import('./features/auth/AuthPage'));
+const AdminDashboard = React.lazy(() => import('./features/admin/AdminDashboard'));
+const MyOrdersPage = React.lazy(() => import('./features/orders/MyOrdersPage'));
+const ProductsPage = React.lazy(() => import('./features/products/ProductsPage'));
 import ErrorBoundary from './shared/components/ErrorBoundary';
 import { WhyUsSection, TestimonialsSection, HomeCTA, NewsletterSection, SiteFooter } from './features/home/HomeSections';
 import { CartProvider, useCart } from './shared/context/CartContext';
@@ -238,75 +238,77 @@ function AppContent() {
 
       {/* Routes */}
       <AnimatePresence mode="wait">
-        <Routes>
-          <Route path="/" element={
-            <div style={{ background: '#050a05' }}>
-              <HeroCarousel onThemeChange={setThemeColor} />
-              <WhyUsSection />
-              <TestimonialsSection />
-              <HomeCTA />
-              <NewsletterSection />
-              <SiteFooter />
-            </div>
-          } />
-          <Route path="/shop" element={
-            <>
-              <ProductsPage />
-              <div style={{ background: '#050a05' }}><SiteFooter /></div>
-            </>
-          } />
-          <Route path="/build" element={
-            <div className="min-h-screen" style={{ background: '#121a12' }}>
-              <div className="pt-32 pb-20 px-4 text-center">
-                <motion.div
-                  initial={{ opacity: 0, y: 60 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 1, ease: [0.19, 1, 0.22, 1] }}
-                >
-                  <p className="text-white/30 text-[11px] uppercase tracking-[0.4em] mb-6">Custom Formulation</p>
-                  <h2
-                    className="shimmer-text mb-8 leading-[0.9] tracking-tight font-light"
-                    style={{
-                      fontFamily: "'Cormorant Garamond', serif",
-                      fontSize: 'clamp(4rem, 10vw, 8rem)',
-                    }}
-                  >
-                    The Atelier
-                  </h2>
-                  <p className="text-white/40 max-w-2xl mx-auto font-light leading-relaxed text-lg">
-                    Sculpt your personalized botanical formulation. Masterfully blended in our laboratory for your exact dermatological profile.
-                  </p>
-                </motion.div>
+        <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center" style={{ background: '#050a05' }}><Loader className="w-8 h-8 text-[#749c56] animate-spin" /></div>}>
+          <Routes>
+            <Route path="/" element={
+              <div style={{ background: '#050a05' }}>
+                <HeroCarousel onThemeChange={setThemeColor} />
+                <WhyUsSection />
+                <TestimonialsSection />
+                <HomeCTA />
+                <NewsletterSection />
+                <SiteFooter />
               </div>
-              <CustomizationEngine />
-              <SiteFooter />
-            </div>
-          } />
-          <Route path="/cart" element={
-            <>
-              <CartPage />
-              <div style={{ background: '#050a05' }}><SiteFooter /></div>
-            </>
-          } />
-          <Route path="/ritual" element={
-            <>
-              <RitualPage />
-              <div style={{ background: '#050a05' }}><SiteFooter /></div>
-            </>
-          } />
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/my-orders" element={<MyOrdersPage />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="*" element={
-            <div className="min-h-screen flex flex-col items-center justify-center text-center px-4" style={{ background: '#050a05' }}>
-              <h1 className="text-white text-6xl font-light mb-4" style={{ fontFamily: "'Cormorant Garamond', serif" }}>404</h1>
-              <p className="text-white/40 mb-8">The page you are looking for does not exist.</p>
-              <Link to="/" className="px-6 py-3 rounded-full text-white text-xs uppercase tracking-widest" style={{ background: 'linear-gradient(135deg, #496337, #749c56)' }}>
-                Return Home
-              </Link>
-            </div>
-          } />
-        </Routes>
+            } />
+            <Route path="/shop" element={
+              <>
+                <ProductsPage />
+                <div style={{ background: '#050a05' }}><SiteFooter /></div>
+              </>
+            } />
+            <Route path="/build" element={
+              <div className="min-h-screen" style={{ background: '#121a12' }}>
+                <div className="pt-32 pb-20 px-4 text-center">
+                  <motion.div
+                    initial={{ opacity: 0, y: 60 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1, ease: [0.19, 1, 0.22, 1] }}
+                  >
+                    <p className="text-white/30 text-[11px] uppercase tracking-[0.4em] mb-6">Custom Formulation</p>
+                    <h2
+                      className="shimmer-text mb-8 leading-[0.9] tracking-tight font-light"
+                      style={{
+                        fontFamily: "'Cormorant Garamond', serif",
+                        fontSize: 'clamp(4rem, 10vw, 8rem)',
+                      }}
+                    >
+                      The Atelier
+                    </h2>
+                    <p className="text-white/40 max-w-2xl mx-auto font-light leading-relaxed text-lg">
+                      Sculpt your personalized botanical formulation. Masterfully blended in our laboratory for your exact dermatological profile.
+                    </p>
+                  </motion.div>
+                </div>
+                <CustomizationEngine />
+                <SiteFooter />
+              </div>
+            } />
+            <Route path="/cart" element={
+              <>
+                <CartPage />
+                <div style={{ background: '#050a05' }}><SiteFooter /></div>
+              </>
+            } />
+            <Route path="/ritual" element={
+              <>
+                <RitualPage />
+                <div style={{ background: '#050a05' }}><SiteFooter /></div>
+              </>
+            } />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/my-orders" element={<MyOrdersPage />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="*" element={
+              <div className="min-h-screen flex flex-col items-center justify-center text-center px-4" style={{ background: '#050a05' }}>
+                <h1 className="text-white text-6xl font-light mb-4" style={{ fontFamily: "'Cormorant Garamond', serif" }}>404</h1>
+                <p className="text-white/40 mb-8">The page you are looking for does not exist.</p>
+                <Link to="/" className="px-6 py-3 rounded-full text-white text-xs uppercase tracking-widest" style={{ background: 'linear-gradient(135deg, #496337, #749c56)' }}>
+                  Return Home
+                </Link>
+              </div>
+            } />
+          </Routes>
+        </React.Suspense>
       </AnimatePresence>
     </>
   );
