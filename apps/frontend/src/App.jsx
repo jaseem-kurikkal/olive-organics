@@ -153,7 +153,7 @@ function AppContent() {
             >
               O
             </div>
-            <div className="font-serif text-2xl tracking-widest text-white mix-blend-difference pointer-events-auto cursor-pointer keep-color" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+            <div className="font-serif text-2xl tracking-widest text-white mix-blend-difference pointer-events-auto cursor-pointer" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
               {siteContent.navigation.brandName}
             </div>
           </Link>
@@ -171,7 +171,7 @@ function AppContent() {
               onClick={() => setAppTheme(t => t === 'dark' ? 'light' : 'dark')}
               className="p-2 text-white/50 hover:text-white transition-colors rounded-full hover:bg-white/5"
             >
-              {appTheme === 'dark' ? <Sun className="w-5 h-5 keep-color" /> : <Moon className="w-5 h-5 keep-color" />}
+              {appTheme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
 
             {/* Cart Button */}
